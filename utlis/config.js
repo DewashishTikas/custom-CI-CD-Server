@@ -1,7 +1,6 @@
 function getConfig(isPackageJsonModified){
     return {
         "Storage-App-Backend": [
-            "pwd",
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
             "pm2 reload myFileSpace"
