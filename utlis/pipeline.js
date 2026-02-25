@@ -7,11 +7,11 @@ export function runPipeline({ project, command }) {
       })
       bashChildProcess.stdout.on('data', (data) => {
          process.stdout.write(data)
-         resolve({ project,data })
+         resolve({ project,data : data.toString() })
       })
       bashChildProcess.stderr.on('data', (data) => {
          process.stderr.write(data)
-         reject({ project, err: data })
+         reject({ project, err: data.toString() })
       })
       bashChildProcess.on("exit", async (code, signal, err) => {
          if (code === 0) {
