@@ -13,6 +13,10 @@ export function runPipeline({ project, command }) {
          process.stderr.write(data)
          reject({ project, data: data.toString() })
       })
+      bashChildProcess.on("error", (err) => {
+         console.log(err);
+         reject({ project, err: err.toString() })
+      })
       bashChildProcess.on("exit", async (code, signal, err) => {
          if (code === 0) {
             console.log(`Script Ended with Code ${code}`)
