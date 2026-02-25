@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(express.json())
 
 app.get("/", (req, res) => {
-    res.send("Checked root endpoint working");
+    res.send("Checked hogaya");
 });
 app.post("/webhook", async (req, res) => {
     if (!req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
