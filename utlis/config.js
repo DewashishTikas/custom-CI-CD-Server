@@ -1,14 +1,12 @@
 function getConfig(isPackageJsonModified){
     return {
         "Storage-App-Backend": [
-            "cd /home/ubuntu/Storage-App-Backend",
             "pwd",
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
             "pm2 reload myFileSpace"
         ],
         "Storage-App-Frontend": [
-            "cd /home/ubuntu/Storage-App-Frontend",
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
             "npm run build",
