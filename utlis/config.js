@@ -1,6 +1,7 @@
 function getConfig(isPackageJsonModified){
     return {
         "Storage-App-Backend": [
+            "ls",
             "cd /home/ubuntu/Storage-App-Backend",
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
