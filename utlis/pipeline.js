@@ -11,7 +11,7 @@ export function runPipeline({ project, command }) {
       })
       bashChildProcess.stderr.on('data', (data) => {
          process.stderr.write(data)
-         reject({ project, err: data.toString() })
+         reject({ project, data: data.toString() })
       })
       bashChildProcess.on("exit", async (code, signal, err) => {
          if (code === 0) {
