@@ -12,10 +12,9 @@ function getConfig(isPackageJsonModified) {
             "aws s3 sync ./dist s3://myfilespace-frontend",
             'aws cloudfront create-invalidation   --distribution-id E2UFBMZJ9YXU5V   --paths "/index.html"'
         ], "custom-CI-CD-Server": [
-            "pwd",
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
-            "pm2 reload custom-CI-CD-Server"
+            "pm2 reload  ci-server"
         ]
     }
 }

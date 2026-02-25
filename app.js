@@ -9,12 +9,10 @@ const PORT = 3000;
 app.use(express.json())
 
 app.get("/", (req, res) => {
-    res.send("Check root endpoint working");
+    res.send("Checked root endpoint working");
 });
 app.post("/webhook", async (req, res) => {
-    console.log('Get the request');
     if (!req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
-    console.log(req.body);
     const signature = "sha256=" + crypto.createHmac('sha256', process.env.WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest('hex')
     if (signature !== req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
     res.sendStatus(200)
