@@ -2,7 +2,7 @@ import { spawn } from 'child_process'
 
 export function runPipeline({ project, command }) {
    return new Promise((resolve, reject) => {
-      const bashChildProcess = spawn("bash", [command])
+      const bashChildProcess = spawn("bash", ["-c", command])
       bashChildProcess.stdout.on('data', (data) => {
          process.stdout.write(data)
          resolve({ project,data })
