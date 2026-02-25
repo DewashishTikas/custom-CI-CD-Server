@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(express.json())
 
 app.get("/", (req, res) => {
-    res.send("Check root endpoint working!!!");
+    res.send("Check root endpoint working!!!!");
 });
 app.post("/webhook", async (req, res) => {
     console.log('Get the request');
