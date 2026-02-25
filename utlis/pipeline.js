@@ -1,3 +1,5 @@
+import { spawn } from 'child_process'
+
 export function runPipeline({project,command}){
    return new Promise((resolve,reject)=>{
      const bashChildProcess = spawn("bash", [command])
