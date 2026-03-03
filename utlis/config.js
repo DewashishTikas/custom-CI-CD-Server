@@ -19,7 +19,7 @@ function getConfig(isPackageJsonModified) {
         ], "custom-CI-CD-Server": [
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
-            "pm2 reload  ci-server"
+            "pm2 reload CI-CD-Server"
         ]
     }
 }
