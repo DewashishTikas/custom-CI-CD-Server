@@ -7,7 +7,6 @@ export function runPipeline({ project, command }) {
       })
       bashChildProcess.stdout.on('data', (data) => {
          process.stdout.write(data)
-         resolve({ project,data : data.toString() })
       })
       bashChildProcess.stderr.on('data', (data) => {
          process.stderr.write(data)
