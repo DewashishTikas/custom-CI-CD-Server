@@ -14,9 +14,17 @@ function getConfig(isPackageJsonModified) {
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
             "npm run build",
-            "aws s3 sync ./dist s3://myfilespace-frontend",
+            "aws s3 sync ./dist s3://myfilespace-frontend/production",
             'aws cloudfront create-invalidation   --distribution-id E2UFBMZJ9YXU5V   --paths "/index.html"'
-        ], "custom-CI-CD-Server": [
+        ],
+        "Storage-App-Frontend-Test": [
+            "git pull",
+            isPackageJsonModified ? "npm ci" : "",
+            "npm run build",
+            "aws s3 sync ./dist s3://myfilespace-frontend/test",
+            'aws cloudfront create-invalidation   --distribution-id E3SAXF3LV0LF04   --paths "/index.html"'
+        ],
+         "custom-CI-CD-Server": [
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
             "pm2 reload CI-CD-Server"
