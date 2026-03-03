@@ -5,6 +5,11 @@ function getConfig(isPackageJsonModified) {
             isPackageJsonModified ? "npm ci" : "",
             "pm2 reload myFileSpace"
         ],
+        "Storage-App-Backend-Test": [
+            "git pull",
+            isPackageJsonModified ? "npm ci" : "",
+            "pm2 reload myFileSpace-test"
+        ],
         "Storage-App-Frontend": [
             "git pull",
             isPackageJsonModified ? "npm ci" : "",
@@ -20,6 +25,6 @@ function getConfig(isPackageJsonModified) {
 }
 
 // gives the list of commands to be executed 
-export function getProjectCommands(projectName, isPackageJsonModified) {
-    return getConfig(isPackageJsonModified)[projectName] || null
+export function getProjectCommands(projectName, isPackageJsonModified,test) {
+    return getConfig(isPackageJsonModified)[`${projectName}${test ? "-Test" : ""}`] || null
 }

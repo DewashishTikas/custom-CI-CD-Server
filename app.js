@@ -9,7 +9,7 @@ const PORT = 3000;
 app.use(express.json())
 
 app.get("/", (req, res) => {
-    res.send("Checked hogaya");
+    res.send("Check hogaya");
 });
 app.post("/webhook", async (req, res) => {
     if (!req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
@@ -17,10 +17,10 @@ app.post("/webhook", async (req, res) => {
     if (signature !== req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
     res.sendStatus(200)
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
-    const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified).filter((command) => command)
+    const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     for (const command of commands) {
         try {
-            await runPipeline({ project: req.body.repository.name, command })
+            await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command })
         } catch (err) {
             console.log(err);
         }
