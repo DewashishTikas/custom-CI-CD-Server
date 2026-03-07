@@ -2,8 +2,8 @@ import { spawn } from 'child_process'
 
 export function runPipeline({ project, command }) {
    return new Promise((resolve, reject) => {
-      const bashChildProcess = spawn("bash", ["-c", command],{
-         cwd: `/home/ubuntu/${project}`
+      const bashChildProcess = spawn("bash", ["-c", command], {
+         cwd: `/home/ubuntu/${project}/${!command.includes("mkdir") ? command.slice(6) : ""}`
       })
       bashChildProcess.stdout.on('data', (data) => {
          process.stdout.write(data)
