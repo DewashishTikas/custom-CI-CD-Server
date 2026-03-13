@@ -4,11 +4,14 @@ function getConfig(isPackageJsonModified) {
     const RETRY_DELAY = 5;
     return {
         "Storage-App-Backend": [
+            "CURRENT=$(readlink current)",
+            'PREVIOUS=$(ls -dt release_* | grep -A1 "$CURRENT" | tail -n1)',
             `cd /home/ubuntu/Storage-App-Backend`,
             `mkdir release_${date}`,
             `cd release_${date}`,
             "git clone https://github.com/DewashishTikas/Storage-App-Backend.git .",
             "npm ci",
+            `mv ../$PREVIOUS.env ../release_${date}.env`,
             `ln -sfn "$(pwd)" /home/ubuntu/Storage-App-Backend/current`,
             'echo "Waiting for app to start..."',
             "pm2 reload myFileSpace",
@@ -28,8 +31,6 @@ done
 echo "Health check failed after ${MAX_RETRIES} attempts"
 echo "Rolling back..."
 
-CURRENT=$(readlink current)
-PREVIOUS=$(ls -dt release_* | grep -A1 "$CURRENT" | tail -n1)
 ln -sfn $PREVIOUS current
 pm2 reload myFileSpace
 
