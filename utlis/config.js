@@ -28,6 +28,7 @@ while [ $COUNT -le ${MAX_RETRIES} ]; do
     echo "Health check attempt $COUNT..."
     if curl -f https://api.myfilespace.xyz/health; then
         echo "Deployment successful"
+        ls -d /home/ubuntu/Storage-App-Backend/release_* | sort -r | tail -n +3 
         ls -d /home/ubuntu/Storage-App-Backend/release_* | sort -r | tail -n +3 | xargs rm -rf
         echo /home/ubuntu/Storage-App-Backend/$PREVIOUS/node_modules
         rm -rf /home/ubuntu/Storage-App-Backend/$PREVIOUS/node_modules
