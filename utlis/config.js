@@ -6,10 +6,7 @@ function getConfig(isPackageJsonModified) {
         "Storage-App-Backend": [
             "echo 'making current and previous variable ...'",
             `CURRENT=$(readlink current 2>/dev/null || echo "")
-            PREVIOUS=""
-            if [ -n "$CURRENT" ]; then
-                PREVIOUS=$(ls -d /home/ubuntu/Storage-App-Backend/release_* | sort -r | grep -v "$CURRENT" | head -n1)
-            fi`,
+            PREVIOUS=$(ls -d /home/ubuntu/Storage-App-Backend/release_* | grep -A1 "$CURRENT" | tail -n1) 2>/dev/null || echo ""`,
             `cd /home/ubuntu/Storage-App-Backend`,
             "echo 'making release directory ...'",
             `mkdir release_${date}`,
