@@ -7,7 +7,7 @@ function getConfig(isPackageJsonModified) {
             `cd /home/ubuntu/Storage-App-Backend`,
             `mkdir release_${date}`,
             `cd release_${date}`,
-            "git clone https://github.com/myfilespace/Storage-App-Backend.git .",
+            "git clone https://github.com/DewashishTikas/Storage-App-Backend.git .",
             "npm ci",
             `ln -sfn release_${date} current`,
             'echo "Waiting for app to start..."',
