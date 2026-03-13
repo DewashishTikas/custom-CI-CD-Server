@@ -4,6 +4,7 @@ function getConfig(isPackageJsonModified) {
     const RETRY_DELAY = 5;
     return {
         "Storage-App-Backend": [
+            "pwd"
             `cd /home/ubuntu/Storage-App-Backend`,
             `mkdir release_${date}`,
             `cd release_${date}`,
