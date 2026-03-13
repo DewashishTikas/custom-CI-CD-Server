@@ -4,13 +4,18 @@ function getConfig(isPackageJsonModified) {
     const RETRY_DELAY = 5;
     return {
         "Storage-App-Backend": [
+            "echo 'making current and previous variable ...'",
             "CURRENT=$(readlink current)",
             'PREVIOUS=$(ls -dt release_* | grep -A1 "$CURRENT" | tail -n1)',
             `cd /home/ubuntu/Storage-App-Backend`,
+            "echo 'making release directory ...'",
             `mkdir release_${date}`,
             `cd release_${date}`,
+            "echo 'Cloning repository ...'",
             "git clone https://github.com/DewashishTikas/Storage-App-Backend.git .",
+            "echo 'Installing dependencies ...'",
             "npm ci",
+            "echo 'Linking current directory ...'",
             `ln -sfn "$(pwd)" /home/ubuntu/Storage-App-Backend/current`,
             'echo "Waiting for app to start..."',
             "pm2 reload myFileSpace",
