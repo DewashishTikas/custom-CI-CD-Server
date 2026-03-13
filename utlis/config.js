@@ -11,7 +11,6 @@ function getConfig(isPackageJsonModified) {
             `cd release_${date}`,
             "git clone https://github.com/DewashishTikas/Storage-App-Backend.git .",
             "npm ci",
-            `mv ../$PREVIOUS.env ../release_${date}.env`,
             `ln -sfn "$(pwd)" /home/ubuntu/Storage-App-Backend/current`,
             'echo "Waiting for app to start..."',
             "pm2 reload myFileSpace",
@@ -21,6 +20,8 @@ while [ $COUNT -le ${MAX_RETRIES} ]; do
     echo "Health check attempt $COUNT..."
     if curl -f https://api.myfilespace.xyz/health; then
         echo "Deployment successful"
+        ls -d release_* | sort -r | tail -n +3 | xargs rm -rf
+        rm -rf /home/ubuntu/Storage-App-Backend/$PREVIOUS/node_modules
         exit 0
     fi
     echo "Health check failed. Retrying in ${RETRY_DELAY} seconds..."
@@ -35,6 +36,7 @@ ln -sfn $PREVIOUS current
 pm2 reload myFileSpace
 
 echo "Rollback complete"
+
 `
         ],
         "Storage-App-Backend-Test": [
