@@ -8,7 +8,7 @@ function getConfig(isPackageJsonModified) {
             `CURRENT=$(readlink current 2>/dev/null || echo "")
             PREVIOUS=""
             if [ -n "$CURRENT" ]; then
-                PREVIOUS=$(ls -d release_* | sort -r | grep -v "$CURRENT" | head -n1)
+                PREVIOUS=$(ls -d /home/ubuntu/Storage-App-Backend/release_* | sort -r | grep -v "$CURRENT" | head -n1)
             fi`,
             `cd /home/ubuntu/Storage-App-Backend`,
             "echo 'making release directory ...'",
