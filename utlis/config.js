@@ -9,7 +9,7 @@ function getConfig(isPackageJsonModified) {
             `cd release_${date}`,
             "git clone https://github.com/DewashishTikas/Storage-App-Backend.git .",
             "npm ci",
-            `ln -sfn "$(pwd)" current`,
+            `ln -sfn "$(pwd)" /home/ubuntu/Storage-App-Backend/current`,
             'echo "Waiting for app to start..."',
             "pm2 reload myFileSpace",
             "sleep 5",
