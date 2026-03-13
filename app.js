@@ -24,7 +24,7 @@ app.post("/webhook", async (req, res) => {
         fullCommand += `${command}\n`
     }
     try {
-        await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, fullCommand })
+        await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command : fullCommand })
     } catch (err) {
         console.log(err);
     }
