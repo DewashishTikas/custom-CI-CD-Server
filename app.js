@@ -20,6 +20,7 @@ app.post("/webhook", async (req, res) => {
 
 
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
+    if(!["Storage-App-Frontend", "Storage-App-Backend"].includes(req.body.repository.name)) { return ; }
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
     for (const command of commands) {
@@ -28,7 +29,7 @@ app.post("/webhook", async (req, res) => {
     }
     const owner = "DewashishTikas";
     const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
-    const ref = "c7a12e212090f7d92bd11a29ec36e032ecc50fe3"; // commit SHA, branch, or tag
+    const ref = "8bddc442d8f36bef9662389986b36eb9081c1a33"; // commit SHA, branch, or tag
     try {
 
         await setCommitStatus({ status: "pending", owner, repo : repo[1], ref, description: "Pipeline started" })
@@ -36,7 +37,7 @@ app.post("/webhook", async (req, res) => {
         await setCommitStatus({ status: "success", owner, repo : repo[1], ref, description: "Pipeline completed successfully" })
     } catch (err) {
         console.log(err);
-        await setCommitStatus({ status: "error", owner, repo : repo[1], ref, description: "Pipeline failed" })
+        await setCommitStatus({ status: "failure", owner, repo : repo[1], ref, description: "Pipeline failed" })
     }
 });
 
