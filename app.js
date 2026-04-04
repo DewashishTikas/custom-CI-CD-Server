@@ -21,7 +21,7 @@ app.post("/webhook", async (req, res) => {
     const ref = "main"; // commit SHA, branch, or tag
 
     const url = `https://api.github.com/repos/${owner}/${repo[1]}/commits/${ref}/status`;
-    const res = await fetch(url, {
+    const res2 = await fetch(url, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${process.env.GITHUB_ACCESS_Token}`,
@@ -34,7 +34,7 @@ app.post("/webhook", async (req, res) => {
             context: "CI/CD Pipeline"
         })
     })
-    const data = await res.json()
+    const data = await res2.json()
     console.log(data);
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
