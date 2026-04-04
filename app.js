@@ -2,6 +2,7 @@ import express from "express";
 import crypto from "crypto"
 import { getProjectCommands } from "./utlis/config.js";
 import { runPipeline } from "./utlis/pipeline.js";
+import { setCommitStatus } from "./utlis/setCommitStatus.js";
 
 const app = express();
 const PORT = 3000;
@@ -16,27 +17,8 @@ app.post("/webhook", async (req, res) => {
     const signature = "sha256=" + crypto.createHmac('sha256', process.env.WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest('hex')
     if (signature !== req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
     res.sendStatus(200)
-    const owner = "DewashishTikas";
-    const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
-    const ref = "c7a12e212090f7d92bd11a29ec36e032ecc50fe3"; // commit SHA, branch, or tag
 
-    const url = `https://api.github.com/repos/${owner}/${repo[1]}/statuses/${ref}`;
-    const res2 = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            state: "pending",
-            target_url: "http://cicd.myfilespace.xyz/logs",
-            description: "Pipeline started",
-            context: "CI/CD Pipeline"
-        })
-    })
-    const data = await res2.json()
-    console.log(data);
-    console.log({ body: req.body });
+
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
@@ -44,10 +26,17 @@ app.post("/webhook", async (req, res) => {
         console.log(command);
         fullCommand += `${command}\n`
     }
+    const owner = "DewashishTikas";
+    const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
+    const ref = "c7a12e212090f7d92bd11a29ec36e032ecc50fe3"; // commit SHA, branch, or tag
     try {
+
+        await setCommitStatus({ status: "pending", owner, repo, ref, description: "Pipeline started" })
         await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command: fullCommand })
+        await setCommitStatus({ status: "success", owner, repo, ref, description: "Pipeline completed successfully" })
     } catch (err) {
         console.log(err);
+        await setCommitStatus({ status: "error", owner, repo, ref, description: "Pipeline failed" })
     }
 });
 

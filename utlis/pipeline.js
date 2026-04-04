@@ -13,6 +13,7 @@ export function runPipeline({ project, command }) {
       })
       bashChildProcess.on("error", (err) => {
          console.log(err);
+         
          reject({ project, err: err.toString() })
       })
       bashChildProcess.on("exit", async (code, signal, err) => {
