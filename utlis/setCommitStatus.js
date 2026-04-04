@@ -13,6 +13,7 @@ export async function setCommitStatus({ status, owner, repo, ref, description })
             context: "CI/CD Pipeline"
         })
     })
-    await res2.json()
+    const object = await res2.json()
+    console.log({object});
     console.log('running commit status', status);
 }

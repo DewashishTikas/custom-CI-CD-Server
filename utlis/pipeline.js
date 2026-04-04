@@ -8,7 +8,7 @@ export function runPipeline({ project, command }) {
          process.stdout.write(data)
       })
       bashChildProcess.stderr.on('data', (data) => {
-         process.stderr.write("error : " , data)
+         process.stderr.write(`error : ${data}`)
          // reject({ project, data: data.toString() })
       })
       bashChildProcess.on("error", (err) => {
