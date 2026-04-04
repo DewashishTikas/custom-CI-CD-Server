@@ -20,7 +20,7 @@ app.post("/webhook", async (req, res) => {
 
 
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
-    if(!["Storage-App-Frontend", "Storage-App-Backend"].includes(req.body.repository.name)) { return ; }
+    if (!["Storage-App-Frontend", "Storage-App-Backend"].includes(req.body.repository.name)) { return; }
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
     for (const command of commands) {
@@ -28,16 +28,16 @@ app.post("/webhook", async (req, res) => {
         fullCommand += `${command}\n`
     }
     const owner = "DewashishTikas";
-    const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
-    const ref = "8bddc442d8f36bef9662389986b36eb9081c1a33"; // commit SHA, branch, or tag
+    console.log({ before: req.body.before, after: req.body.after });
+    const ref = req.body.after;  // commit SHA, branch, or tag
     try {
 
-        await setCommitStatus({ status: "pending", owner, repo : repo[1], ref, description: "Pipeline started" })
+        await setCommitStatus({ status: "pending", owner, repo: req.body.repository.name, ref, description: "Pipeline started" })
         await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command: fullCommand })
-        await setCommitStatus({ status: "success", owner, repo : repo[1], ref, description: "Pipeline completed successfully" })
+        await setCommitStatus({ status: "success", owner, repo: req.body.repository.name, ref, description: "Pipeline completed successfully" })
     } catch (err) {
-        console.log({err});
-        await setCommitStatus({ status: "failure", owner, repo : repo[1], ref, description: "Pipeline failed" })
+        console.log({ err });
+        await setCommitStatus({ status: "failure", owner, repo: req.body.repository.name, ref, description: "Pipeline failed" })
     }
 });
 
