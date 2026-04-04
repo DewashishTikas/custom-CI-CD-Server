@@ -18,13 +18,13 @@ app.post("/webhook", async (req, res) => {
     res.sendStatus(200)
     const owner = "DewashishTikas";
     const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
-    const ref = "main"; // commit SHA, branch, or tag
+    const ref = "c7a12e212090f7d92bd11a29ec36e032ecc50fe3"; // commit SHA, branch, or tag
 
     const url = `https://api.github.com/repos/${owner}/${repo[1]}/statuses/${ref}`;
     const res2 = await fetch(url, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${process.env.GITHUB_ACCESS_Token}`,
+            "Authorization": `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -36,6 +36,7 @@ app.post("/webhook", async (req, res) => {
     })
     const data = await res2.json()
     console.log(data);
+    console.log({ body: req.body });
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
