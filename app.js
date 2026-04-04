@@ -31,12 +31,12 @@ app.post("/webhook", async (req, res) => {
     const ref = "c7a12e212090f7d92bd11a29ec36e032ecc50fe3"; // commit SHA, branch, or tag
     try {
 
-        await setCommitStatus({ status: "pending", owner, repo, ref, description: "Pipeline started" })
+        await setCommitStatus({ status: "pending", owner, repo : repo[1], ref, description: "Pipeline started" })
         await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command: fullCommand })
-        await setCommitStatus({ status: "success", owner, repo, ref, description: "Pipeline completed successfully" })
+        await setCommitStatus({ status: "success", owner, repo : repo[1], ref, description: "Pipeline completed successfully" })
     } catch (err) {
         console.log(err);
-        await setCommitStatus({ status: "error", owner, repo, ref, description: "Pipeline failed" })
+        await setCommitStatus({ status: "error", owner, repo : repo[1], ref, description: "Pipeline failed" })
     }
 });
 
