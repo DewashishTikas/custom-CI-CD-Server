@@ -1,5 +1,5 @@
 export async function setCommitStatus({ status, owner, repo, ref, description }) {
-    const url = `https://api.github.com/repos/${owner}/${repo[1]}/statuses/${ref}`;
+    const url = `https://api.github.com/repos/${owner}/${repo}/statuses/${ref}`;
     const res2 = await fetch(url, {
         method: "POST",
         headers: {
