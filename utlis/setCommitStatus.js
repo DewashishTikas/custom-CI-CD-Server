@@ -15,5 +15,5 @@ export async function setCommitStatus({ status, owner, repo, ref, description })
     })
     const object = await res2.json()
     console.log({object});
-    console.log('running commit status', status);
+    console.log('running commit status', {status, owner, repo, ref,});
 }
