@@ -29,7 +29,7 @@ app.post("/webhook", async (req, res) => {
         },
         body: JSON.stringify({
             state: "pending",
-            target_url: "http://localhost:3000/logs",
+            target_url: "http://cicd.myfilespace.xyz/logs",
             description: "Pipeline started",
             context: "CI/CD Pipeline"
         })
@@ -49,6 +49,10 @@ app.post("/webhook", async (req, res) => {
         console.log(err);
     }
 });
+
+app.get("/logs", (req, res) => {
+    res.json({ headers: req.headers, body: req.body })
+})
 
 app.get("/status", async (req, res) => {
     const owner = "DewashishTikas";
