@@ -16,6 +16,24 @@ app.post("/webhook", async (req, res) => {
     const signature = "sha256=" + crypto.createHmac('sha256', process.env.WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest('hex')
     if (signature !== req.headers['x-hub-signature-256']) { return res.status(403).json({ error: "Invalid Signature" }); }
     res.sendStatus(200)
+    const owner = "DewashishTikas";
+    const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
+    const ref = "main"; // commit SHA, branch, or tag
+
+    const url = `https://api.github.com/repos/${owner}/${repo[1]}/commits/${ref}/status`;
+    await fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.GITHUB_ACCESS_Token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            state: "pending",
+            target_url: "http://localhost:3000/logs",
+            description: "Pipeline started",
+            context: "CI/CD Pipeline"
+        })
+    })
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
@@ -24,11 +42,32 @@ app.post("/webhook", async (req, res) => {
         fullCommand += `${command}\n`
     }
     try {
-        await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command : fullCommand })
+        await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command: fullCommand })
     } catch (err) {
         console.log(err);
     }
 });
+
+app.get("/status", async (req, res) => {
+    const owner = "DewashishTikas";
+    const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
+    const ref = "main"; // commit SHA, branch, or tag
+
+    const url = `https://api.github.com/repos/${owner}/${repo[1]}/commits/${ref}/status`;
+    await fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.GITHUB_ACCESS_Token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            state: "pending",
+            target_url: "http://localhost:3000/logs",
+            description: "Pipeline started",
+            context: "CI/CD Pipeline"
+        })
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
