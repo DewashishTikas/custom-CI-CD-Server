@@ -36,7 +36,7 @@ app.post("/webhook", async (req, res) => {
         await runPipeline({ project: `${req.body.repository.name}${req.body.ref.includes("develop") ? "-Test" : ""}`, command: fullCommand })
         await setCommitStatus({ status: "success", owner, repo : repo[1], ref, description: "Pipeline completed successfully" })
     } catch (err) {
-        console.log(err);
+        console.log({err});
         await setCommitStatus({ status: "failure", owner, repo : repo[1], ref, description: "Pipeline failed" })
     }
 });
