@@ -20,7 +20,7 @@ app.post("/webhook", async (req, res) => {
 
 
     const isPackageJsonModified = req.body.commits.some(({ modified }) => modified.includes("package.json"))
-    if (!["Storage-App-Frontend", "Storage-App-Backend"].includes(req.body.repository.name)) { return; }
+    if (!["Storage-App-Frontend", "Storage-App-Backend", "custom-CI-CD-Server"].includes(req.body.repository.name)) { return; }
     const commands = getProjectCommands(req.body.repository.name, isPackageJsonModified, req.body.ref.includes("develop")).filter((command) => command)
     let fullCommand = 'set -e\n';
     for (const command of commands) {
