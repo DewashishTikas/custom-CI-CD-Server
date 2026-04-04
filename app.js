@@ -20,7 +20,7 @@ app.post("/webhook", async (req, res) => {
     const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
     const ref = "main"; // commit SHA, branch, or tag
 
-    const url = `https://api.github.com/repos/${owner}/${repo[1]}/commits/${ref}/status`;
+    const url = `https://api.github.com/repos/${owner}/${repo[1]}/statuses/${ref}`;
     const res2 = await fetch(url, {
         method: "POST",
         headers: {
@@ -59,7 +59,7 @@ app.get("/status", async (req, res) => {
     const repo = ["Storage-App-Frontend", "Storage-App-Backend"];
     const ref = "main"; // commit SHA, branch, or tag
 
-    const url = `https://api.github.com/repos/${owner}/${repo[1]}/commits/${ref}/status`;
+    const url = `https://api.github.com/repos/${owner}/${repo[1]}/statuses/${ref}`;
     await fetch(url, {
         method: "POST",
         headers: {
